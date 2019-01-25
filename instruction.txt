@@ -1,0 +1,13 @@
+ The iInitialize has been modified with a variable called windows identifier or "win "in short and a new function
+called iDestroy has been created.
+write iDestroy like iDestroy(win).dont forget to initialize another window after destruction using iInitialize nor you 
+may have an error!...see example for details...have fun...........
+
+
+Md.abdul munim dibosh
+
+ID=0805033
+
+Dept. of CSE
+
+BUET,2008. 

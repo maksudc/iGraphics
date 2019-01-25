@@ -1,3 +1,4 @@
+
 /*
 	author: S. M. Shahriar Nirjon
 	last modified: March 12, 2008
@@ -26,6 +27,7 @@ void iDraw();
 void iKeyboard(unsigned char);
 void iSpecialKeyboard(unsigned char);
 void iMouseMove(int, int);
+void iPassiveMouseMove(int, int);
 void iMouse(int button, int state, int x, int y);
 
 static void  __stdcall iA0(HWND,unsigned int, unsigned int, unsigned long){if(!iAnimPause[0])iAnimFunction[0]();}
@@ -341,6 +343,15 @@ void mouseMoveHandlerFF(int mx, int my)
 	glFlush();
 }
 
+void mousePassiveMoveHandlerFF(int mx, int my)
+{
+	iMouseX = mx;
+	iMouseY = iScreenHeight - my;
+	iPassiveMouseMove(iMouseX, iMouseY);
+
+	glFlush();
+}
+
 void mouseHandlerFF(int button, int state, int x, int y)
 {
 	iMouseX = x;
@@ -350,16 +361,17 @@ void mouseHandlerFF(int button, int state, int x, int y)
 
 	glFlush();
 }
-
+//modified for windows destruction...by dibosh(CSE,08,BUET)
 void iInitialize(int width=500, int height=500, char *title="iGraphics")
 {
+	extern int win;
 	iScreenHeight = height;
 	iScreenWidth = width;
 
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB) ;
 	glutInitWindowSize(width , height ) ;
 	glutInitWindowPosition( 10 , 10 ) ;
-	glutCreateWindow(title) ;
+	win=glutCreateWindow(title) ;
 	glClearColor( 0.0 , 0.0 , 0.0 , 0.0 ) ;
 	glMatrixMode( GL_PROJECTION) ;
 	glLoadIdentity() ;
@@ -374,11 +386,18 @@ void iInitialize(int width=500, int height=500, char *title="iGraphics")
  	glutSpecialFunc(keyboardHandler2FF); //special keys
 	glutMouseFunc(mouseHandlerFF);
 	glutMotionFunc(mouseMoveHandlerFF);	
+	glutPassiveMotionFunc(mousePassiveMoveHandlerFF);	
 	glutIdleFunc(animFF) ;
 
 	glutMainLoop() ;
+	
 }
+//modified for windows destruction...by dibosh(CSE,08,BUET)
+void iDestroy(int win)
+{
 
+	glutDestroyWindow(win);
+}
 /*int main()
 {
 	iInitialize(600, 600);
