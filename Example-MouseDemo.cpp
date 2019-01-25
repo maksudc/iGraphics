@@ -3,6 +3,30 @@
 	last modified: August 8, 2008
 */
 # include "iGraphics.h"
+#include <string.h>
+
+int x[100];
+int y[100];
+int total;
+
+int mposx,mposy;
+
+
+void drawFlowerAt(int p, int q)
+{
+	iSetColor(255, 0, 0);
+	iFilledCircle(p+4, q+4, 4);
+
+	iFilledCircle(p+4, q-4, 4);
+
+	iFilledCircle(p-4, q+4, 4);
+
+	iFilledCircle(p-4, q-4, 4);
+
+
+	iSetColor(255, 255, 0);
+	iFilledCircle(p, q, 4);
+}
 
 /* 
 	function iDraw() is called again and again by the system.
@@ -10,7 +34,27 @@
 void iDraw()
 {
 	//place your drawing codes here	
+
 	iClear();
+
+	int i;
+	for(i = 0; i < total; i++)
+	{
+		drawFlowerAt(x[i], y[i]);
+	}
+
+	iText(10, 10, "Left click to draw, Right click to delete.");
+
+	char p[50];
+	char b[10];
+	char c[10];
+	p[0]='\0';
+	strcat(p,"point co-ordinate: x = ");
+	strcat(p,itoa(mposx,b,10));
+	strcat(p,",y= ");
+	strcat(p,itoa(mposy,c,10));
+		iText(10, 40, p);
+
 }
 
 /* 
@@ -22,6 +66,13 @@ void iMouseMove(int mx, int my)
 	//place your codes here
 }
 
+
+void iPassiveMouseMove(int mx, int my)
+{
+	//place your codes here
+	mposx=mx;
+	mposy = my;
+}
 /* 
 	function iMouse() is called when the user presses/releases the mouse.
 	(mx, my) is the position where the mouse pointer is.
@@ -31,22 +82,21 @@ void iMouse(int button, int state, int mx, int my)
 	if(button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
 	{
 		//place your codes here	
+		if(total < 100)
+		{
+			x[total] = mx;
+			y[total] = my;
+			total++;
+		}
 	}
 	if(button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN)
 	{
 		//place your codes here	
+		if(total>0)
+		{
+			total--;
+		}
 	}
-}
-/*iPassiveMouseMove is called to detect and use 
-the mouse point without pressing any button */
-
-void iPassiveMouseMove(int mx,int my)
-{
-	//place your code here
-	
- if(mx== ){}        /*Something to do with mx*/
- else if(my== ){}   /*Something to do with my*/
- 
 }
 
 /*
@@ -55,9 +105,10 @@ void iPassiveMouseMove(int mx,int my)
 */
 void iKeyboard(unsigned char key)
 {
-	if(key == 'q')
+	if(key == 'x')
 	{
-		//do something with 'q'
+		//do something with 'x'
+		exit(0);
 	}
 	//place your codes for other keys here
 }
@@ -84,6 +135,7 @@ void iSpecialKeyboard(unsigned char key)
 int main()
 {
 	//place your own initialization codes here. 
-	iInitialize(400, 400, "demooo");
+	total = 0;
+	iInitialize(400, 400, "MouseDemo");
 	return 0;
 }	

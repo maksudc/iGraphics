@@ -26,6 +26,7 @@ void iDraw();
 void iKeyboard(unsigned char);
 void iSpecialKeyboard(unsigned char);
 void iMouseMove(int, int);
+void iPassiveMouseMove(int, int);
 void iMouse(int button, int state, int x, int y);
 
 static void  __stdcall iA0(HWND,unsigned int, unsigned int, unsigned long){if(!iAnimPause[0])iAnimFunction[0]();}
@@ -341,6 +342,15 @@ void mouseMoveHandlerFF(int mx, int my)
 	glFlush();
 }
 
+void mousePassiveMoveHandlerFF(int mx, int my)
+{
+	iMouseX = mx;
+	iMouseY = iScreenHeight - my;
+	iPassiveMouseMove(iMouseX, iMouseY);
+
+	glFlush();
+}
+
 void mouseHandlerFF(int button, int state, int x, int y)
 {
 	iMouseX = x;
@@ -374,6 +384,7 @@ void iInitialize(int width=500, int height=500, char *title="iGraphics")
  	glutSpecialFunc(keyboardHandler2FF); //special keys
 	glutMouseFunc(mouseHandlerFF);
 	glutMotionFunc(mouseMoveHandlerFF);	
+	glutPassiveMotionFunc(mousePassiveMoveHandlerFF);	
 	glutIdleFunc(animFF) ;
 
 	glutMainLoop() ;
